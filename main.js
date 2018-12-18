@@ -1,22 +1,23 @@
-var Width = window.innerHeight * 1.7;
-var Height = window.innerHeight;
+var Width = 1200;
+var Height = 700;
 var ballRadius = 30;
 var leftScore = 0;
 var rightScore = 0;
 balls = [];
-var ballXvelocity = 10;
+var ballXvelocity = 12;
+const paddleEdgeBounceDampener = .002;
 
 function setup() {
   createCanvas (Width, Height);
   balls.push(new Ball);
   };
-let rightPlayerY = window.innerHeight/2;
-let leftPlayerY = window.innerHeight/2;
+let rightPlayerY = Height/2;
+let leftPlayerY = Height/2;
 var playerSpeed = 13;
   function draw() {
     background(0);
     fill(255);
-    rect((window.innerHeight * 1.7) - 75, rightPlayerY, Height/60, Height/7); //right player
+    rect((Height * 1.7) - 75, rightPlayerY, Height/60, Height/7); //right player
     rect(50, leftPlayerY, Height/60, Height/7); //left player
     move();
     textSize(100);
@@ -53,13 +54,14 @@ class Ball {
     this.x = Width/2;
     this.y = Height/2;
     this.random = random(2);
-    this.random2 = random(-10, 10);
+    this.random2 = random(-6, 6);
     if (this.random < 1) {
       this.Xvelocity = ballXvelocity;
     } else {
       this.Xvelocity = -ballXvelocity;
     }
     this.Yvelocity = this.random2;
+    this.terminalYvelocity = 15;
   }
   show() {
     fill(255);
@@ -71,34 +73,38 @@ class Ball {
   move() {
     this.y+=this.Yvelocity;
     this.x+=this.Xvelocity;
-    if (this.x <= 50 + ballRadius && this.x > 50 && this.y >= leftPlayerY && this.y <= leftPlayerY + Height/14) { //bounce left paddle top half
+    if (this.x <= 50 + ballRadius && this.x > 50 && this.y >= leftPlayerY - ballRadius && this.y <= leftPlayerY + Height/14) { //bounce left paddle top half
       this.x = 50 + ballRadius;
       this.Xvelocity*=-1;
-      this.Yvelocity-=5;
+      //this.Yvelocity-=3;
+      this.Yvelocity-= dist(this.x, this.y, 50, leftPlayerY + Height/14) * dist(this.x, this.y, 50, leftPlayerY + Height/14) * paddleEdgeBounceDampener;
     } 
 
-    if (this.x >= (window.innerHeight * 1.7) - 75 - ballRadius && this.x < (window.innerHeight * 1.7) - 75 + Height/60 
-    && this.y >= rightPlayerY && this.y <= rightPlayerY + Height/14) { //bounce right paddle top half
-      this.x = (window.innerHeight * 1.7) - 75 - ballRadius;
-      this.Xvelocity*=-1;
-      this.Yvelocity-=5;
-    } 
-
-    if (this.x <= 50 + ballRadius && this.x > 50 && this.y > leftPlayerY + Height/14 && this.y <= leftPlayerY + Height/7) { //bounce left paddle bottom half
+     if (this.x <= 50 + ballRadius && this.x > 50 && this.y > leftPlayerY + Height/14 && this.y <= leftPlayerY + Height/7 + ballRadius) { //bounce left paddle bottom half
       this.x = 50 + ballRadius;
       this.Xvelocity*=-1;
-      this.Yvelocity+=5;
+      //this.Yvelocity+=3;
+      this.Yvelocity+= dist(this.x, this.y, 50, leftPlayerY + Height/14) * dist(this.x, this.y, 50, leftPlayerY + Height/14) * paddleEdgeBounceDampener;
     } 
 
-    if (this.x >= (window.innerHeight * 1.7) - 75 - ballRadius && this.x < (window.innerHeight * 1.7) - 75 + Height/60 
-    && this.y >= rightPlayerY + Height/14 && this.y <= rightPlayerY + Height/7) { //bounce right paddle bottom half
-      this.x = (window.innerHeight * 1.7) - 75 - ballRadius;
+    if (this.x >= (Height * 1.7) - 75 - ballRadius && this.x < (Height * 1.7) - 75 + Height/60 
+    && this.y >= rightPlayerY -ballRadius && this.y <= rightPlayerY + Height/14) { //bounce right paddle top half
+      this.x = (Height * 1.7) - 75 - ballRadius;
       this.Xvelocity*=-1;
-      this.Yvelocity+=5;
+      //this.Yvelocity-=3;
+      this.Yvelocity-= dist(this.x, this.y, (Height * 1.7) - 75, rightPlayerY + Height/14) * dist(this.x, this.y, (Height * 1.7) - 75, rightPlayerY + Height/14) * paddleEdgeBounceDampener;
     } 
 
-    if (this.y >= window.innerHeight) { //bounce bottom wall
-      this.y = window.innerHeight;
+    if (this.x >= (Height * 1.7) - 75 - ballRadius && this.x < (Height * 1.7) - 75 + Height/60 
+    && this.y >= rightPlayerY + Height/14 && this.y <= rightPlayerY + Height/7 + ballRadius) { //bounce right paddle bottom half
+      this.x = (Height * 1.7) - 75 - ballRadius;
+      this.Xvelocity*=-1;
+      //this.Yvelocity+=3;
+      this.Yvelocity+= dist(this.x, this.y, (Height * 1.7) - 75, rightPlayerY + Height/14) * dist(this.x, this.y, (Height * 1.7) - 75, rightPlayerY + Height/14) * paddleEdgeBounceDampener;
+    } 
+
+    if (this.y >= Height) { //bounce bottom wall
+      this.y = Height;
       this.Yvelocity*=-1;
     } 
 
@@ -107,14 +113,20 @@ class Ball {
       this.Yvelocity*=-1;
     } 
 
+    if (abs(this.Yvelocity) > this.terminalYvelocity && this.Yvelocity < 0){
+      this.Yvelocity = -this.terminalYvelocity;
+    }
+    if (abs(this.Yvelocity) > this.terminalYvelocity && this.Yvelocity > 0){
+      this.Yvelocity = this.terminalYvelocity;
+    }
   }
 
   offScreenRight() {
-    return (this.x > Width);
+    return (this.x > Width + ballRadius);
   }
 
   offScreenLeft() {
-    return (this.x < 0);
+    return (this.x < 0 - ballRadius);
   }
 }
 
