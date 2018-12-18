@@ -1,0 +1,11 @@
+timed mode - every 3 seconds a new ball will appear
+manual mode - add a new ball by pressing space
+automatic mode - new ball will appear 2 seconds after someone scores
+fun mode - adjust variable with sliders
+Variables to adjust:
+	ball color
+	ball speed
+	paddle speed
+	ball size
+	paddle length
+	
