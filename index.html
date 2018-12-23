@@ -5,6 +5,7 @@
   <!-- PLEASE NO CHANGES BELOW THIS LINE (UNTIL I SAY SO) -->
   <script language="javascript"  src="p5.js"></script>
   <script language="javascript" type="text/javascript" src="sketch_181102a.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
   <!-- OK, YOU CAN MAKE CHANGES BELOW THIS LINE AGAIN -->
 
   <!-- This line removes any default padding and style. 
@@ -13,11 +14,47 @@
 </head>
 
 <body>
-        <script language="javascript" type="text/javascript" src="setup.js"></script>
-        <script language="javascript" type="text/javascript" src="title.js"></script>
         <script language="javascript" type="text/javascript" src="main.js"></script>
         <script language="javascript" type="text/javascript" src="dat.gui.js"></script>
         <script language="javascript" type="text/javascript" src="quicksettings.js"></script>
         <script language="javascript" type="text/javascript" src="scenemanager.js"></script>
+
+        <h1>Pong v1.3</h1>
+        <h2>by Cosimos Cendo</h2>
+  <audio id="wall">
+    <source src="Minecraft-hurtflesh2.mp3" type="audio/mpeg">
+    </audio>
+  <audio id="paddle">
+    <source src="roblox.mp3" type="audio/mpeg">
+    </audio>
+  <audio id="fortnite">
+    <source src="fortnite.mp3" type="audio/mpeg">
+    </audio>
+  <audio id="smash">
+    <source src="smash.mp3" type="audio/mpeg">
+    </audio>
+  <script>
+  var fortnite = document.getElementById("fortnite"); 
+  var paddle = document.getElementById("paddle"); 
+  var wall = document.getElementById("wall"); 
+  var smash = document.getElementById("smash");
+  
+  function fortniteAudio() {
+    fortnite.play();
+  }
+
+  function wallAudio() {
+    wall.play();
+  }
+
+  function paddleAudio() {
+    paddle.play();
+  }
+
+  function smashAudio() {
+    smash.play();
+  }
+  </script>
 </body>
+  
 </html>
