@@ -16,6 +16,7 @@ let rightPlayerHeight = 100;
 let leftPlayerWidth = 11;
 let leftPlayerHeight = 100;
 var backgroundColor = 0;
+var AIerror = 4;
 
 function setup() {
   createCanvas (Width, Height);
@@ -26,7 +27,8 @@ function setup() {
     mgr.addScene (FreePlay);
     mgr.addScene (SinglePlayer);
     mgr.showNextScene();
-    smashAudio(); 
+  smash.pause();
+  smash.currentTime = 0;
   };
 
 function draw() {
@@ -75,7 +77,7 @@ function Title() {
         textSize(30);
         noStroke();
         fill(0, 100, 200);
-        text('Play by yourself against an AI (IN DEVELOPMENT)', Width/2, Height - 10);
+        text('Play by yourself against an AI', Width/2, Height - 10);
       } 
     }
 
@@ -200,7 +202,77 @@ function FreePlay() {
 }
 
 function SinglePlayer() {
+  this.setup = function() {
+    this.randoNum = 0;
+  }
+  this.draw = function() {
+    background(backgroundColor);
+    strokeWeight(0);
+    fill(255);
+    rect(Width - 50 - rightPlayerWidth, rightPlayerY, rightPlayerWidth, rightPlayerHeight); //right player
+    rect(50, leftPlayerY, leftPlayerWidth, leftPlayerHeight); //left player
+    move();
+    textSize(100);
+    textAlign(CENTER);
+    text(leftScore, Width/4, Height/4);
+    text(rightScore, 3*Width/4, Height/4);
+    textSize(20);
+    this.AI();
+    this.randomNum();
+    for (i = 0; i <= balls.length - 1; i++) {
+    balls[i].show();
+    balls[i].move();
+    }   
+    for (let i = balls.length - 1; i >= 0; i--) { //score
+      if (balls[i].offScreenRight()){
+        balls.splice(i, 1);
+        leftScore+=1;
+        fortniteAudio();
+        this.randoNum = 0;
+        this.d = setTimeout(ballSpawn, 1200);
+      } else if (balls[i].offScreenLeft()){
+        balls.splice(i, 1);
+        rightScore+=1;
+        fortniteAudio();
+        this.randoNum = 0;
+        this.d = setTimeout(ballSpawn, 1200);
+      } 
+    }
+    textSize(30);
+    text('Main Menu', 1120, 25);
+  }
+    
+    this.mousePressed = function() {
+      if (mouseX > 1025 && mouseY < 50) {
+      mgr.showScene(Title);
+      leftScore = 0;
+      rightScore = 0;
+      rightPlayerY = Height/2;
+      leftPlayerY = Height/2;
+      balls = [];
+      clearTimeout(this.d);
+    }
+  }
 
+  this.AI = function(){
+    for (i = 0; i < balls.length; i++){
+      if (balls[i].y > rightPlayerY + 3*rightPlayerHeight/4 + this.randoNum && balls[i].x > Width/2) {
+        rightPlayerY+=playerSpeed;
+      } else if (balls[i].y < rightPlayerY + rightPlayerHeight/4 + this.randoNum && balls[i].x > Width/2) {
+        rightPlayerY-=playerSpeed;
+      } else {
+        rightPlayerY+=0;
+      }
+    }
+  }
+
+  this.randomNum = function() {
+    for (i = 0; i < balls.length; i++) {
+      if (balls[i].x < 100 && balls[i].x > 50) {
+       this.randoNum = floor(Math.pow(random(-AIerror, AIerror), 3));
+      } 
+    }
+  }
 }
 
 
