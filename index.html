@@ -19,19 +19,26 @@
         <script language="javascript" type="text/javascript" src="quicksettings.js"></script>
         <script language="javascript" type="text/javascript" src="scenemanager.js"></script>
 
-        <h1>Pong v1.3</h1>
-        <h2>by Cosimos Cendo</h2>
+        <h1>Pong v1.4</h1>
+        <h2>by Cosimos Cendo 2018</h2>
+        <h3>
+            <button type="button" onclick="smashAudio()">Start Background Music</button>
+            <button type="button" onclick="smashAudioStop()">Stop Background Music</button>
+            <input type="checkbox" id="dank">Dank Sound Effects
+        </h3>
+        <h4>Player 1: W/S</h4>
+        <h5>Player 2: ↑/↓</h5>
   <audio id="wall">
-    <source src="Minecraft-hurtflesh2.mp3" type="audio/mpeg">
+    <source src="aud/Minecraft-hurtflesh2.mp3" type="audio/mpeg">
     </audio>
   <audio id="paddle">
-    <source src="roblox.mp3" type="audio/mpeg">
+    <source src="aud/roblox.mp3" type="audio/mpeg">
     </audio>
   <audio id="fortnite">
-    <source src="fortnite.mp3" type="audio/mpeg">
+    <source src="aud/fortnite.mp3" type="audio/mpeg">
     </audio>
   <audio id="smash">
-    <source src="smash.mp3" type="audio/mpeg">
+    <source src="aud/smash.mp3" type="audio/mpeg">
     </audio>
   <script>
   var fortnite = document.getElementById("fortnite"); 
@@ -40,21 +47,34 @@
   var smash = document.getElementById("smash");
   
   function fortniteAudio() {
-    fortnite.play();
+    if (dank.checked == true) {
+      fortnite.play();
+    }
   }
 
   function wallAudio() {
-    wall.play();
+    if (dank.checked == true) {
+      wall.play();
+    }
   }
 
   function paddleAudio() {
-    paddle.play();
+    if (dank.checked == true) {
+      paddle.play();
+    }
   }
 
   function smashAudio() {
     smash.play();
   }
+
+  function smashAudioStop() {
+    smash.pause();
+    smash.currentTime = 0;
+  }
   </script>
+ 
 </body>
+
   
 </html>
