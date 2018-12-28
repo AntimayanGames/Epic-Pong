@@ -1,4 +1,3 @@
-manual mode - add a new ball by pressing space
 fun mode - adjust variable with sliders
 Variables to adjust:
 	ball color
@@ -6,5 +5,5 @@ Variables to adjust:
 	paddle speed
 	ball size
 	paddle length
-
+add player win screens to other modes
 	
