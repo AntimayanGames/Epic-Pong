@@ -5,5 +5,4 @@ Variables to adjust:
 	paddle speed
 	ball size
 	paddle length
-add player win screens to other modes
 	

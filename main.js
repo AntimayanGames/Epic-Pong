@@ -6,7 +6,7 @@ balls = [];
 var ballRadius = 25;
 var leftScore = 0;
 var rightScore = 0;
-var initialBallXvelocity = 12;
+var initialBallXvelocity = 13;
 const paddleEdgeBounceDampener = .002;
 var playerSpeed = 15;
 var AIspeed = 12;
@@ -21,9 +21,6 @@ var AIerror = 4;
 var leftPlayerColor = '#FFAAAA';
 var rightPlayerColor = '#AAAAFF';
 var AIdifficulty = 2;
-var bool = true;
-
-var supertest;
 
 function setup() {
   createCanvas(Width, Height);
@@ -193,16 +190,30 @@ function Normal() {
     }
 
     for (let i = balls.length - 1; i >= 0; i--) { //score
-      if (balls[i].offScreenRight()) {
+      if (balls[i].offScreenRight() && leftScore < 6) {
         balls.splice(i, 1);
         leftScore += 1;
         fortniteAudio();
+        this.randoNum = 0;
         this.d = setTimeout(ballSpawn, 1200);
-      } else if (balls[i].offScreenLeft()) {
+      } else if (balls[i].offScreenLeft() && rightScore < 6) {
         balls.splice(i, 1);
         rightScore += 1;
         fortniteAudio();
+        this.randoNum = 0;
         this.d = setTimeout(ballSpawn, 1200);
+      } else if (balls[i].offScreenRight() && leftScore == 6) {
+        balls.splice(i, 1);
+        leftScore += 1;
+        fortniteAudio();
+        this.randoNum = 0;
+        mgr.showScene(leftWins);
+      } else if (balls[i].offScreenLeft() && rightScore == 6) {
+        balls.splice(i, 1);
+        rightScore += 1;
+        fortniteAudio();
+        this.randoNum = 0;
+        mgr.showScene(rightWins);
       }
     }
     textSize(30);
@@ -251,14 +262,28 @@ function Timed() {
     }
 
     for (let i = balls.length - 1; i >= 0; i--) { //score
-      if (balls[i].offScreenRight()) {
+      if (balls[i].offScreenRight() && leftScore < 6) {
         balls.splice(i, 1);
         leftScore += 1;
         fortniteAudio();
-      } else if (balls[i].offScreenLeft()) {
+        this.randoNum = 0;
+      } else if (balls[i].offScreenLeft() && rightScore < 6) {
         balls.splice(i, 1);
         rightScore += 1;
         fortniteAudio();
+        this.randoNum = 0;
+      } else if (balls[i].offScreenRight() && leftScore == 6) {
+        balls.splice(i, 1);
+        leftScore += 1;
+        fortniteAudio();
+        this.randoNum = 0;
+        mgr.showScene(leftWins);
+      } else if (balls[i].offScreenLeft() && rightScore == 6) {
+        balls.splice(i, 1);
+        rightScore += 1;
+        fortniteAudio();
+        this.randoNum = 0;
+        mgr.showScene(rightWins);
       }
     }
     textSize(30);
