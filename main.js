@@ -18,7 +18,7 @@ let leftPlayerHeight = 100;
 var backgroundColor = 0;
 var AIerror = 4;
 
-var test;
+var supertest;
 
 function setup() {
   createCanvas(Width, Height);
