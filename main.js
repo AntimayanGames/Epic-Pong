@@ -258,9 +258,9 @@ function SinglePlayer() {
   this.AI = function () {
     for (i = 0; i < balls.length; i++) {
       if (balls[i].y > rightPlayerY + 3 * rightPlayerHeight / 4 + this.randoNum && balls[i].x > Width / 2) {
-        rightPlayerY += playerSpeed;
+        rightPlayerY += playerSpeed - 3;
       } else if (balls[i].y < rightPlayerY + rightPlayerHeight / 4 + this.randoNum && balls[i].x > Width / 2) {
-        rightPlayerY -= playerSpeed;
+        rightPlayerY -= playerSpeed - 3;
       } else {
         rightPlayerY += 0;
       }

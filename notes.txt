@@ -1,5 +1,4 @@
 manual mode - add a new ball by pressing space
-automatic mode - new ball will appear 2 seconds after someone scores
 fun mode - adjust variable with sliders
 Variables to adjust:
 	ball color
@@ -7,7 +6,5 @@ Variables to adjust:
 	paddle speed
 	ball size
 	paddle length
-make AI for single player mode
-clean up code
-	
+
 	
