@@ -42,13 +42,13 @@ h2 {
     left: 10px;
     width: 20px;
 	z-index: 50;
-    font-size: 40px;
+    font-size: 30px;
     align-items: center;
 }
 
 h3 {
     position: absolute;
-	top: 430px;
+	top: 400px;
     left: 10px;
     width: 150px;
 	z-index: 50;
