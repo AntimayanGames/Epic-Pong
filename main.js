@@ -80,7 +80,7 @@ function Title() {
       textSize(30);
       noStroke();
       fill(0, 100, 200);
-      text('2 Player: Have fun by changing aspects of the game (IN DEVELOPMENT)', Width / 2, Height - 10);
+      text('2 Player: Have fun by changing aspects of the game', Width / 2, Height - 10);
     } else if (mouseX > 250 && mouseX < 950 && mouseY > 50 && mouseY < 150) { //single player
       rect(250, 50, 700, 100);
       textSize(30);
