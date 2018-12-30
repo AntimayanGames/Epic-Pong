@@ -139,7 +139,7 @@ function Title() {
       clickAudio();
       mgr.showScene(Normal);
       setTimeout(ballSpawn, 1200);
-    } else if (mouseX > 300 && mouseX < 900 && mouseY > rectX + 175 && mouseY < rectX + 175 + 100) {
+    } else if (mouseX > 300 && mouseX < 900 && mouseY > rectX + 153 && mouseY < rectX + 153 + 100) {
       clickAudio();
       mgr.showScene(Timed);
       setTimeout(ballSpawn, 1200);
@@ -178,7 +178,13 @@ function Normal() {
     text(leftScore, Width / 2 - 100, Height / 4);
     fill(rightPlayerColor);
     text(rightScore, Width / 2 + 100, Height / 4);
-    textSize(20);
+    textSize(30);
+    fill(255);
+    stroke(255);
+    strokeWeight(9);
+    line(Width / 2, 0, Width / 2, Height);
+    strokeWeight(0);
+    text('Main Menu', 1120, 25);
 
     for (i = 0; i <= balls.length - 1; i++) {
       balls[i].show();
@@ -212,12 +218,6 @@ function Normal() {
         mgr.showScene(rightWins);
       }
     }
-    textSize(30);
-    fill(255);
-    strokeWeight(9);
-    line(Width / 2, 0, Width / 2, Height);
-    strokeWeight(0);
-    text('Main Menu', 1120, 25);
   }
 
   this.mousePressed = function () {
@@ -284,6 +284,7 @@ function Timed() {
     }
     textSize(30);
     fill(255);
+    stroke(255);
     strokeWeight(9);
     line(Width / 2, 0, Width / 2, Height);
     strokeWeight(0);
@@ -504,6 +505,7 @@ function SinglePlayer() {
     }
     textSize(30);
     fill(255);
+    stroke(255);
     strokeWeight(9);
     line(Width / 2, 0, Width / 2, Height);
     strokeWeight(0);
