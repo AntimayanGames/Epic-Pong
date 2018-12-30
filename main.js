@@ -88,7 +88,8 @@ function Title() {
       fill(0, 100, 200);
       text('Play by yourself against an AI (First to 7 points wins)', Width / 2, Height - 10);
     }
-
+    triangle(1050, 260, 1020, 300, 1080, 300);
+    triangle(1050, 410, 1020, 370, 1080, 370);
     if (AIdifficulty === 1) {
       AIerror = 7;
       AIspeed = 8;
@@ -112,17 +113,12 @@ function Title() {
       text('Hard', 1050, 350);
     } else if (AIdifficulty === 4) {
       AIerror = 2;
-      AIspeed = playerSpeed;
+      AIspeed = leftPlayerSpeed.value;
       textSize(50);
       fill(255);
       noStroke();
       text('Impossible', 1050, 350);
     }
-    stroke(255);
-    noFill();
-    triangle(1050, 260, 1020, 300, 1080, 300);
-    triangle(1050, 410, 1020, 370, 1080, 370);
-
     if (mouseX > 1000 && mouseX < 1100 && mouseY > 220 && mouseY < 320) {
       fill(255, 255, 180);
       stroke(255);
