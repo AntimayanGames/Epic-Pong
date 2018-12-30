@@ -63,6 +63,8 @@ function Title() {
     text('Free Play', Width / 2 + 5, Height - 110);
     noFill();
     strokeWeight(1.5);
+    triangle(1050, 260, 1020, 300, 1080, 300);
+    triangle(1050, 410, 1020, 370, 1080, 370);
     if (mouseX > 300 && mouseX < 900 && mouseY > rectX && mouseY < rectX + 100) { //normal
       rect(300, rectX, 600, 100);
       textSize(30);
@@ -88,8 +90,8 @@ function Title() {
       fill(0, 100, 200);
       text('Play by yourself against an AI (First to 7 points wins)', Width / 2, Height - 10);
     }
-    triangle(1050, 260, 1020, 300, 1080, 300);
-    triangle(1050, 410, 1020, 370, 1080, 370);
+
+
     if (AIdifficulty === 1) {
       AIerror = 7;
       AIspeed = 8;
