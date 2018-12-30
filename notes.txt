@@ -1,8 +1,0 @@
-fun mode - adjust variable with sliders
-Variables to adjust:
-	ball color
-	ball speed
-	paddle speed
-	ball size
-	paddle length
-	

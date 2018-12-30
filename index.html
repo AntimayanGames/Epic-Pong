@@ -1,9 +1,10 @@
 <html>
+
 <head>
   <meta charset="UTF-8">
 
   <!-- PLEASE NO CHANGES BELOW THIS LINE (UNTIL I SAY SO) -->
-  <script language="javascript"  src="p5.js"></script>
+  <script language="javascript" src="p5.js"></script>
   <script language="javascript" type="text/javascript" src="sketch_181102a.js"></script>
   <link rel="stylesheet" type="text/css" href="style.css">
   <!-- OK, YOU CAN MAKE CHANGES BELOW THIS LINE AGAIN -->
@@ -14,77 +15,77 @@
 </head>
 
 <body>
-        <script language="javascript" type="text/javascript" src="main.js"></script>
-        <script language="javascript" type="text/javascript" src="dat.gui.js"></script>
-        <script language="javascript" type="text/javascript" src="quicksettings.js"></script>
-        <script language="javascript" type="text/javascript" src="scenemanager.js"></script>
+  <script language="javascript" type="text/javascript" src="main.js"></script>
+  <script language="javascript" type="text/javascript" src="dat.gui.js"></script>
+  <script language="javascript" type="text/javascript" src="quicksettings.js"></script>
+  <script language="javascript" type="text/javascript" src="scenemanager.js"></script>
 
-        <h1>Pong v1.5</h1>
-        <h2>by Cosimos Cendo 2018</h2>
-        <h3>
-            <button type="button" onclick="smashAudio()">Start Background Music</button>
-            <button type="button" onclick="smashAudioStop()">Stop Background Music</button>
-            <input type="checkbox" id="dank">Dank Sound Effects
-        </h3>
-        <h4>Player 1: W/S</h4>
-        <h5>Player 2: ↑/↓</h5>
+  <h1>Pong v2.0</h1>
+  <h2>by Cosimos Cendo 2018</h2>
+  <h3>
+    <button type="button" onclick="smashAudio()">Start Background Music</button>
+    <button type="button" onclick="smashAudioStop()">Stop Background Music</button>
+    <input type="checkbox" id="dank">Dank Sound Effects
+  </h3>
+  <h4>Player 1: W/S</h4>
+  <h5>Player 2: ↑/↓</h5>
   <audio id="wall">
     <source src="aud/Minecraft-hurtflesh2.mp3" type="audio/mpeg">
-    </audio>
+  </audio>
   <audio id="paddle">
     <source src="aud/roblox.mp3" type="audio/mpeg">
-    </audio>
+  </audio>
   <audio id="fortnite">
     <source src="aud/fortnite.mp3" type="audio/mpeg">
-    </audio>
+  </audio>
   <audio id="smash">
     <source src="aud/smash.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="click">
-      <source src="aud/click.wav" type="audio/wav">
-      </audio>
+  </audio>
+  <audio id="click">
+    <source src="aud/click.wav" type="audio/wav">
+  </audio>
   <script>
-  var fortnite = document.getElementById("fortnite"); 
-  var paddle = document.getElementById("paddle"); 
-  var wall = document.getElementById("wall"); 
-  var smash = document.getElementById("smash");
-  
-  function fortniteAudio() {
-    if (dank.checked == true) {
-      fortnite.volume = 0.9;
-      fortnite.play();
+    var fortnite = document.getElementById("fortnite");
+    var paddle = document.getElementById("paddle");
+    var wall = document.getElementById("wall");
+    var smash = document.getElementById("smash");
+
+    function fortniteAudio() {
+      if (dank.checked == true) {
+        fortnite.volume = 0.9;
+        fortnite.play();
+      }
     }
-  }
 
-  function wallAudio() {
-    if (dank.checked == true) {
-      wall.play();
+    function wallAudio() {
+      if (dank.checked == true) {
+        wall.play();
+      }
     }
-  }
 
-  function paddleAudio() {
-    if (dank.checked == true) {
-      paddle.play();
+    function paddleAudio() {
+      if (dank.checked == true) {
+        paddle.play();
+      }
     }
-  }
 
-  function smashAudio() {
-    smash.volume = 0.4;
-    smash.play();
-  }
+    function smashAudio() {
+      smash.volume = 0.4;
+      smash.play();
+    }
 
-  function smashAudioStop() {
-    smash.pause();
-    smash.currentTime = 0;
-  }
+    function smashAudioStop() {
+      smash.pause();
+      smash.currentTime = 0;
+    }
 
 
-  function clickAudio() {
-    click.play();
-  }
+    function clickAudio() {
+      click.play();
+    }
   </script>
- 
+
 </body>
 
-  
+
 </html>

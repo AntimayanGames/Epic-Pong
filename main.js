@@ -3,19 +3,21 @@ const Height = 700;
 const rectX = 200;
 var mgr;
 balls = [];
-var ballRadius = 25;
+var ballRadius = { value: 25 };
 var leftScore = 0;
 var rightScore = 0;
-var initialBallXvelocity = 13;
-const paddleEdgeBounceDampener = .002;
-var playerSpeed = 15;
+var initialBallXvelocity = { value: 13 };
+var leftPlayerSpeed = { value: 15 };
+var rightPlayerSpeed = { value: 15 };
 var AIspeed = 12;
 let rightPlayerY = Height / 2;
 let leftPlayerY = Height / 2;
 let rightPlayerWidth = 11;
-let rightPlayerHeight = 100;
+var rightPlayerX = Width - 50 - rightPlayerWidth;
+var leftPlayerX = 50;
+let rightPlayerHeight = { value: 100 };
 let leftPlayerWidth = 11;
-let leftPlayerHeight = 100;
+var leftPlayerHeight = { value: 100 };
 var backgroundColor = 0;
 var AIerror = 4;
 var leftPlayerColor = '#FFAAAA';
@@ -131,11 +133,6 @@ function Title() {
       stroke(255);
       strokeWeight(4);
       triangle(1050, 410, 1020, 370, 1080, 370);
-    } else {
-      stroke(255);
-      noFill();
-      triangle(1050, 260, 1020, 300, 1080, 300);
-      triangle(1050, 410, 1020, 370, 1080, 370);
     }
   }
 
@@ -148,9 +145,10 @@ function Title() {
       clickAudio();
       mgr.showScene(Timed);
       setTimeout(ballSpawn, 1200);
-    } else if (mouseX > 300 && mouseX < 900 && mouseY > rectX + 2 * 175 && mouseY < rectX + 2 * 175 + 100) { //free play
+    } else if (mouseX > 300 && mouseX < 900 && mouseY > rectX + 2 * 175 - 50 && mouseY < rectX + 2 * 175 + 100) { //free play
       clickAudio();
       mgr.showScene(FreePlay);
+      setTimeout(ballSpawn, 1200);
     } else if (mouseX > 250 && mouseX < 950 && mouseY > 50 && mouseY < 150) { //single player
       clickAudio();
       mgr.showScene(SinglePlayer);
@@ -173,9 +171,9 @@ function Normal() {
     background(backgroundColor);
     strokeWeight(0);
     fill(rightPlayerColor);
-    rect(Width - 50 - rightPlayerWidth, rightPlayerY, rightPlayerWidth, rightPlayerHeight); //right player
+    rect(Width - 50 - rightPlayerWidth, rightPlayerY, rightPlayerWidth, rightPlayerHeight.value); //right player
     fill(leftPlayerColor);
-    rect(50, leftPlayerY, leftPlayerWidth, leftPlayerHeight); //left player
+    rect(50, leftPlayerY, leftPlayerWidth, leftPlayerHeight.value); //left player
     move();
     textSize(100);
     textAlign(CENTER);
@@ -247,9 +245,9 @@ function Timed() {
     background(backgroundColor);
     fill(255);
     fill(rightPlayerColor);
-    rect(Width - 50 - rightPlayerWidth, rightPlayerY, rightPlayerWidth, rightPlayerHeight); //right player
+    rect(Width - 50 - rightPlayerWidth, rightPlayerY, rightPlayerWidth, rightPlayerHeight.value); //right player
     fill(leftPlayerColor);
-    rect(50, leftPlayerY, leftPlayerWidth, leftPlayerHeight); //left player
+    rect(50, leftPlayerY, leftPlayerWidth, leftPlayerHeight.value); //left player
     move();
     textSize(100);
     textAlign(CENTER);
@@ -307,10 +305,152 @@ function Timed() {
 }
 
 function FreePlay() {
+  parameters = class {
+    constructor(x, y, t, p, min, max, c) {
+      this.triX = x;
+      this.triY = y;
+      this.min = min;
+      this.max = max;
+      this.change = c;
+      this.text = t;
+      this.parameter = p;
+    }
+
+    operate() {
+      stroke(255);
+      strokeWeight(1);
+      noFill();
+      triangle(this.triX, this.triY, this.triX - 10, this.triY + 20, this.triX + 10, this.triY + 20);
+      triangle(this.triX, this.triY + 70, this.triX - 10, this.triY + 50, this.triX + 10, this.triY + 50);
+      fill(255);
+      textSize(20);
+      text(this.text, this.triX, this.triY + 42);
+
+
+      if (mouseX > this.triX - 10 && mouseX < this.triX + 10 && mouseY > this.triY && mouseY < this.triY + 20) {
+        fill(255, 255, 180);
+        stroke(255);
+        strokeWeight(4);
+        triangle(this.triX, this.triY, this.triX - 10, this.triY + 20, this.triX + 10, this.triY + 20);
+      } else if (mouseX > this.triX - 10 && mouseX < this.triX + 10 && mouseY > this.triY + 50 && mouseY < this.triY + 70) {
+        fill(255, 255, 180);
+        stroke(255);
+        strokeWeight(4);
+        triangle(this.triX, this.triY + 70, this.triX - 10, this.triY + 50, this.triX + 10, this.triY + 50);
+      }
+    }
+
+    mousePressed() {
+      if (mouseX > this.triX - 10 && mouseX < this.triX + 10 && mouseY > this.triY && mouseY < this.triY + 20 && this.parameter.value < this.max) {
+        clickAudio();
+        this.parameter.value += this.change;
+      } else if (mouseX > this.triX - 10 && mouseX < this.triX + 10 && mouseY > this.triY + 50 && mouseY < this.triY + 70 && this.parameter.value > this.min) {
+        clickAudio();
+        this.parameter.value -= this.change;
+      }
+    }
+  }
+
   this.draw = function () {
+    this.parameterArray =
+      [
+        new parameters(100, 50, 'paddle length', leftPlayerHeight, 10, 400, 15),
+        new parameters(300, 20, 'paddle speed', leftPlayerSpeed, 4, 100, 4),
+        new parameters(480, 20, 'ball size', ballRadius, 2, 200, 6),
+        new parameters(680, 20, 'ball speed', initialBallXvelocity, 2, 33, 2),
+        new parameters(900, 20, 'paddle speed', rightPlayerSpeed, 4, 100, 4),
+        new parameters(1100, 50, 'paddle length', rightPlayerHeight, 10, 400, 15)
+      ];
     background(backgroundColor);
+    strokeWeight(0);
+    fill(rightPlayerColor);
+    rect(Width - 50 - rightPlayerWidth, rightPlayerY, rightPlayerWidth, rightPlayerHeight.value); //right player
+    fill(leftPlayerColor);
+    rect(50, leftPlayerY, leftPlayerWidth, leftPlayerHeight.value); //left player
+    move();
+    textSize(100);
+    textAlign(CENTER);
+    text(leftScore, Width / 2 - 100, Height / 4);
+    fill(rightPlayerColor);
+    text(rightScore, Width / 2 + 100, Height / 4);
+    textSize(30);
+    fill(255);
+    text('Press Space to Serve New Balls', Width / 2 + 9, Height - 20);
+
+    for (i = 0; i <= balls.length - 1; i++) {
+      balls[i].show();
+      balls[i].move();
+    }
+
+    for (i = 0; i <= this.parameterArray.length - 1; i++) {
+      this.parameterArray[i].operate();
+    }
+
+    for (let i = balls.length - 1; i >= 0; i--) { //score
+
+      if (balls[i].offScreenRight()) {
+        balls.splice(i, 1);
+        leftScore += 1;
+        fortniteAudio();
+        this.randoNum = 0;
+        this.d = setTimeout(ballSpawn, 1200);
+      } else if (balls[i].offScreenLeft()) {
+        balls.splice(i, 1);
+        rightScore += 1;
+        fortniteAudio();
+        this.randoNum = 0;
+        this.d = setTimeout(ballSpawn, 1200);
+      }
+    }
+    textSize(30);
+    fill(255);
+    strokeWeight(9);
+    line(Width / 2, 0, Width / 2, Height);
+    strokeWeight(0);
+    text('Main Menu', 1120, 25);
+    text('Reset Score', 87, 25);
+    text('Clear Screen', 93, Height - 10);
+    this.keyPressed();
+  }
+
+
+  this.mousePressed = function () {
+    for (i = 0; i < this.parameterArray.length; i++) {
+      this.parameterArray[i].mousePressed();
+    }
+    if (mouseX > 1025 && mouseY < 50) {
+      clickAudio();
+      mgr.showScene(Title);
+      leftScore = 0;
+      rightScore = 0;
+      rightPlayerY = Height / 2;
+      leftPlayerY = Height / 2;
+      balls = [];
+      clearTimeout(this.d);
+      ballRadius.value = 25;
+      leftPlayerHeight.value = 100;
+      rightPlayerHeight.value = 100;
+      leftPlayerSpeed.value = 15;
+      rightPlayerSpeed.value = 15;
+      initialBallXvelocity.value = 13;
+    } else if (mouseX < 180 && mouseY < 30) {
+      clickAudio();
+      leftScore = 0;
+      rightScore = 0;
+    } else if (mouseX < 190 && mouseY > Height - 30) {
+      clickAudio();
+      clearTimeout(this.d);
+      balls = [];
+    }
+  }
+
+  this.keyPressed = function () {
+    if (keyIsDown(32)) {
+      balls.unshift(new Ball);
+    }
   }
 }
+
 
 function SinglePlayer() {
   this.setup = function () {
@@ -321,9 +461,9 @@ function SinglePlayer() {
     background(backgroundColor);
     strokeWeight(0);
     fill(rightPlayerColor);
-    rect(Width - 50 - rightPlayerWidth, rightPlayerY, rightPlayerWidth, rightPlayerHeight); //right player
+    rect(Width - 50 - rightPlayerWidth, rightPlayerY, rightPlayerWidth, rightPlayerHeight.value); //right player
     fill(leftPlayerColor);
-    rect(50, leftPlayerY, leftPlayerWidth, leftPlayerHeight); //left player
+    rect(50, leftPlayerY, leftPlayerWidth, leftPlayerHeight.value); //left player
     move();
     textSize(100);
     textAlign(CENTER);
@@ -386,9 +526,9 @@ function SinglePlayer() {
 
   this.AI = function () {
     for (i = 0; i < balls.length; i++) {
-      if (balls[i].y > rightPlayerY + 3 * rightPlayerHeight / 4 + this.randoNum && balls[i].x > Width / 2) {
+      if (balls[i].y > rightPlayerY + 3 * rightPlayerHeight.value / 4 + this.randoNum && balls[i].x > Width / 2) {
         rightPlayerY += AIspeed;
-      } else if (balls[i].y < rightPlayerY + rightPlayerHeight / 4 + this.randoNum && balls[i].x > Width / 2) {
+      } else if (balls[i].y < rightPlayerY + rightPlayerHeight.value / 4 + this.randoNum && balls[i].x > Width / 2) {
         rightPlayerY -= AIspeed;
       } else {
         rightPlayerY += 0;
@@ -499,25 +639,19 @@ function leftWins() {
 
 function move() {
   if (keyIsDown(UP_ARROW) && rightPlayerY > 0) {
-    rightPlayerY -= playerSpeed;
-  } else if (keyIsDown(DOWN_ARROW) && rightPlayerY < Height - rightPlayerHeight) {
-    rightPlayerY += playerSpeed;
+    rightPlayerY -= rightPlayerSpeed.value;
+  } else if (keyIsDown(DOWN_ARROW) && rightPlayerY < Height - rightPlayerHeight.value) {
+    rightPlayerY += rightPlayerSpeed.value;
   } if (keyIsDown(87) && leftPlayerY > 0) {
-    leftPlayerY -= playerSpeed;
-  } else if (keyIsDown(83) && leftPlayerY < Height - leftPlayerHeight) {
-    leftPlayerY += playerSpeed;
+    leftPlayerY -= leftPlayerSpeed.value;
+  } else if (keyIsDown(83) && leftPlayerY < Height - leftPlayerHeight.value) {
+    leftPlayerY += leftPlayerSpeed.value;
   }
 }
 
-//function keyPressed() {
-//if (keyCode == 32) {
-//balls.unshift(new Ball);
-//}
-//}
-
 class Ball {
   constructor() {
-    this.ballXvelocity = initialBallXvelocity;
+    this.ballXvelocity = initialBallXvelocity.value;
     this.ballAcceleration = 1.0001;
     this.x = Width / 2;
     this.y = Height / 2;
@@ -535,50 +669,54 @@ class Ball {
   show() {
     fill(255, 255, 180);
     //noStroke();
-    ellipse(this.x, this.y, ballRadius);
+    ellipse(this.x, this.y, ballRadius.value);
   }
 
   move() {
     this.y += this.Yvelocity;
     this.x += this.Xvelocity;
-    if (this.x <= 50 + ballRadius / 2 + leftPlayerWidth && this.x > 50 && this.y >= leftPlayerY - ballRadius / 2 && this.y <= leftPlayerY + leftPlayerHeight / 2) { //bounce left paddle top half
-      this.x = 50 + ballRadius / 2 + leftPlayerWidth;
+    if (this.x <= 50 + ballRadius.value / 2 + leftPlayerWidth && this.x > 50 && this.y >= leftPlayerY - ballRadius.value / 2 && this.y <= leftPlayerY + leftPlayerHeight.value / 2) { //bounce left paddle top half
+      this.x = 50 + ballRadius.value / 2 + leftPlayerWidth;
       this.Xvelocity *= -1;
       paddleAudio();
-      this.Yvelocity -= dist(this.x, this.y, 50, leftPlayerY + Height / 14) * dist(this.x, this.y, 50, leftPlayerY + Height / 14) * paddleEdgeBounceDampener;
+      this.Yvelocity -= map(Math.pow(dist(this.x, this.y, leftPlayerX + leftPlayerWidth, leftPlayerY + leftPlayerHeight.value / 2), 2), 0,
+        Math.pow(leftPlayerHeight.value / 2, 2), 0, 8);
     }
 
-    if (this.x <= 50 + ballRadius / 2 + leftPlayerWidth && this.x > 50 && this.y > leftPlayerY + leftPlayerHeight / 2 && this.y <= leftPlayerY + leftPlayerHeight + ballRadius / 2) { //bounce left paddle bottom half
-      this.x = 50 + ballRadius / 2 + leftPlayerWidth;
+    if (this.x <= 50 + ballRadius.value / 2 + leftPlayerWidth && this.x > 50 && this.y > leftPlayerY + leftPlayerHeight.value / 2 && this.y <= leftPlayerY + leftPlayerHeight.value + ballRadius.value / 2) { //bounce left paddle bottom half
+      this.x = 50 + ballRadius.value / 2 + leftPlayerWidth;
       this.Xvelocity *= -1;
       paddleAudio();
-      this.Yvelocity += dist(this.x, this.y, 50, leftPlayerY + Height / 14) * dist(this.x, this.y, 50, leftPlayerY + Height / 14) * paddleEdgeBounceDampener;
+      this.Yvelocity += map(Math.pow(dist(this.x, this.y, leftPlayerX + leftPlayerWidth, leftPlayerY + leftPlayerHeight.value / 2), 2), 0,
+        Math.pow(leftPlayerHeight.value / 2, 2), 0, 8);
     }
 
-    if (this.x >= Width - 50 - rightPlayerWidth - ballRadius / 2 && this.x < Width - 50
-      && this.y >= rightPlayerY - ballRadius / 2 && this.y <= rightPlayerY + rightPlayerHeight / 2) { //bounce right paddle top half
-      this.x = Width - 50 - rightPlayerWidth - ballRadius / 2;
+    if (this.x >= Width - 50 - rightPlayerWidth - ballRadius.value / 2 && this.x < Width - 50
+      && this.y >= rightPlayerY - ballRadius.value / 2 && this.y <= rightPlayerY + rightPlayerHeight.value / 2) { //bounce right paddle top half
+      this.x = Width - 50 - rightPlayerWidth - ballRadius.value / 2;
       this.Xvelocity *= -1;
       paddleAudio();
-      this.Yvelocity -= dist(this.x, this.y, (Height * 1.7) - 75, rightPlayerY + Height / 14) * dist(this.x, this.y, (Height * 1.7) - 75, rightPlayerY + Height / 14) * paddleEdgeBounceDampener;
+      this.Yvelocity -= map(Math.pow(dist(this.x, this.y, rightPlayerX, rightPlayerY + rightPlayerHeight.value / 2), 2), 0,
+        Math.pow(rightPlayerHeight.value / 2, 2), 0, 8);
     }
 
-    if (this.x >= Width - 50 - rightPlayerWidth - ballRadius / 2 && this.x < Width - 50
-      && this.y >= rightPlayerY + rightPlayerHeight / 2 && this.y <= rightPlayerY + rightPlayerHeight + ballRadius / 2) { //bounce right paddle bottom half
-      this.x = Width - 50 - rightPlayerWidth - ballRadius / 2;
+    if (this.x >= Width - 50 - rightPlayerWidth - ballRadius.value / 2 && this.x < Width - 50
+      && this.y >= rightPlayerY + rightPlayerHeight.value / 2 && this.y <= rightPlayerY + rightPlayerHeight.value + ballRadius.value / 2) { //bounce right paddle bottom half
+      this.x = Width - 50 - rightPlayerWidth - ballRadius.value / 2;
       this.Xvelocity *= -1;
       paddleAudio();
-      this.Yvelocity += dist(this.x, this.y, (Height * 1.7) - 75, rightPlayerY + Height / 14) * dist(this.x, this.y, (Height * 1.7) - 75, rightPlayerY + Height / 14) * paddleEdgeBounceDampener;
+      this.Yvelocity += map(Math.pow(dist(this.x, this.y, rightPlayerX, rightPlayerY + rightPlayerHeight.value / 2), 2), 0,
+        Math.pow(rightPlayerHeight.value / 2, 2), 0, 8);
     }
 
-    if (this.y >= Height - ballRadius / 2) { //bounce bottom wall
-      this.y = Height - ballRadius / 2;
+    if (this.y >= Height - ballRadius.value / 2) { //bounce bottom wall
+      this.y = Height - ballRadius.value / 2;
       this.Yvelocity *= -1;
       wallAudio();
     }
 
-    if (this.y <= 0 + ballRadius / 2) { //bounce top wall
-      this.y = 0 + ballRadius / 2;
+    if (this.y <= 0 + ballRadius.value / 2) { //bounce top wall
+      this.y = 0 + ballRadius.value / 2;
       this.Yvelocity *= -1;
       wallAudio();
     }
@@ -593,11 +731,11 @@ class Ball {
   }
 
   offScreenRight() {
-    return (this.x > Width + ballRadius);
+    return (this.x > Width + ballRadius.value);
   }
 
   offScreenLeft() {
-    return (this.x < 0 - ballRadius);
+    return (this.x < 0 - ballRadius.value);
   }
 }
 
